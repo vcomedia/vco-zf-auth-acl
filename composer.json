@@ -1,0 +1,25 @@
+{
+    "name": "vcomedia/vco-zf-auth-acl",
+    "description": "Zend Framework 2 auth and acl module.",
+    "type": "library",
+    "license": "MIT",
+    "keywords": [
+        "zf2",
+        "auth",
+        "acl"
+    ],
+    "authors": [
+        {
+            "name": "Vahag Dudukgian",
+            "email": "vahag@vcomedia.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "zendframework/zendframework": ">=2.2"
+    },
+    "autoload": {
+        "psr-0": {"VcoZfAuthAcl": "src/"},
+        "classmap": ["Module.php"]
+    }
+}
