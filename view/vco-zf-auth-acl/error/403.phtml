@@ -1,0 +1,8 @@
+<h1><?=$this->translate("403 Forbidden.")?></h1>
+<p>
+    <?php if ($error == 'error-unauthorized') : ?>
+        <?=$reason?>.
+    <?php else : ?>
+        <?=$this->translate("An unknown error occurred.")?>
+    <?php endif;?>
+</p>

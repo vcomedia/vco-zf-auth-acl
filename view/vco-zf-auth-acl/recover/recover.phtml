@@ -1,0 +1,61 @@
+<?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('recover', array('controller' => 'recover', 'action' => 'recover')));
+    $form->prepare();
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="container">
+        <div class="row">
+            <div class="span6 offset3 well">
+                <form class="form-horizontal">
+                    <div class="control-group">
+                        <?= $this->formLabel($form->get('identity')) ?>
+                        <div class="controls">
+                            <?= $this->formInput($form->get('identity')); ?>
+                        </div>
+                        <?= $this->formElementErrors()
+                            ->setMessageOpenFormat('<div class="alert alert-error alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>')
+                            ->setMessageSeparatorString('</div><div class="alert alert-error alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>')
+                            ->setMessageCloseString('</div>')
+                            ->render($form->get('identity'));?>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <?php
+                            if (!empty($this->successMessages)) {
+                                foreach ($this->successMessages as $msg) {
+                                    ?>
+                                    <div class="alert alert-success alert-dismissable">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-hidden="true">&times;</button>
+                                        <?= $msg; ?>
+                                    </div>
+                                <?php
+                                }
+                            }
+                            if (!empty($this->errorMessages)) {
+                                foreach ($this->errorMessages as $msg) {
+                                    ?>
+                                    <div class="alert alert-error alert-dismissable">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-hidden="true">&times;</button>
+                                        <?= $msg; ?>
+                                    </div>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <?= $this->formInput($form->get('submit')); ?>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php
+    echo $this->form()->closeTag($form);
+    ?>

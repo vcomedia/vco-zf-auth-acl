@@ -1,0 +1,6 @@
+<?$url = $this->url('reset', array('id' => $this->user->getPasswordReset()->getGuid()), array('force_canonical' => true))?>
+<?=$this->translate($this->config['messages']['passwordResetEmailHeaderText'])?>
+<br /><br />
+<a href="<?=$url?>"><?=$url?></a>
+<br /><br />
+<?=$this->translate($this->config['messages']['passwordResetEmailFooterText'])?>

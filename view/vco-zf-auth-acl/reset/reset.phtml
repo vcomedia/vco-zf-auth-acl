@@ -1,0 +1,72 @@
+<?php
+    $form = $this->form;
+    $form->setAttribute('action', $this->url('reset', array('controller' => 'reset', 'action' => 'reset', 'id' => $this->id)));
+    $form->prepare();
+    echo $this->form()->openTag($form);
+    ?>
+    <div class="container">
+        <div class="row">
+            <div class="span6 offset3 well">
+                <form class="form-horizontal">
+                    <div class="control-group">
+                        <?= $this->formLabel($form->get('password')) ?>
+                        <div class="controls">
+                            <?= $this->formInput($form->get('password')); ?>
+                            <?= $this->formElementErrors()
+                                ->setMessageOpenFormat('<div class="alert alert-error alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>')
+                                ->setMessageSeparatorString('</div><div class="alert alert-error alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>')
+                                ->setMessageCloseString('</div>')
+                                ->render($form->get('password'));?>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <?= $this->formLabel($form->get('confirm')) ?>
+                        <div class="controls">
+                            <?= $this->formInput($form->get('confirm')); ?>
+                            <?= $this->formElementErrors()
+                                ->setMessageOpenFormat('<div class="alert alert-error alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>')
+                                ->setMessageSeparatorString('</div><div class="alert alert-error alert-dismissable"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>')
+                                ->setMessageCloseString('</div>')
+                                ->render($form->get('confirm'));?>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <?php
+                            if (!empty($this->successMessages)) {
+                                foreach ($this->successMessages as $msg) {
+                                    ?>
+                                    <div class="alert alert-success alert-dismissable">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-hidden="true">&times;</button>
+                                        <?= $msg; ?>
+                                    </div>
+                                <?php
+                                }
+                            }
+                            if (!empty($this->errorMessages)) {
+                                foreach ($this->errorMessages as $msg) {
+                                    ?>
+                                    <div class="alert alert-error alert-dismissable">
+                                        <button type="button" class="close" data-dismiss="alert"
+                                                aria-hidden="true">&times;</button>
+                                        <?= $msg; ?>
+                                    </div>
+                                <?php
+                                }
+                            }
+                            ?>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <?= $this->formInput($form->get('submit')); ?>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php
+    echo $this->form()->closeTag($form);
+    ?>
