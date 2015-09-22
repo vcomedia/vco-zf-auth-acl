@@ -60,7 +60,7 @@ class Reset extends Form
                 'type' => 'Zend\Form\Element\Submit',
                 'attributes' => array(
                     'value' => $this->config['messages']['resetSubmitFieldLabel'],
-                    'class' => 'btn',
+                    'class' => 'button',
                     'id' => 'resetButton',
                 ),
             )

@@ -57,7 +57,7 @@ class Login extends Form
                 'type' => 'Zend\Form\Element\Submit',
                 'attributes' => array(
                     'value' => $this->config['messages']['loginSubmitFieldLabel'],
-                    'class' => 'btn',
+                    'class' => 'button',
                     'id' => 'loginButton',
                 ),
             )

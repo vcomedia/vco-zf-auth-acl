@@ -40,7 +40,7 @@ class Recover extends Form
                 'type' => 'Zend\Form\Element\Submit',
                 'attributes' => array(
                     'value' => $this->config['messages']['recoverSubmitFieldLabel'],
-                    'class' => 'btn',
+                    'class' => 'button',
                     'id' => 'recoverButton',
                 ),
             )
