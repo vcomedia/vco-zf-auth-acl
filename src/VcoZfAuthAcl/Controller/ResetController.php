@@ -81,14 +81,9 @@ class ResetController extends AbstractActionController
         $viewModel = new ViewModel(
             array(
                 'form' => $this->resetForm,
-                'id' => $id,
-                'errorMessages' =>  array_merge($this->flashMessenger()->getErrorMessages(), $this->flashMessenger()->getCurrentErrorMessages()),
-                'successMessages' => array_merge($this->flashMessenger()->getSuccessMessages(), $this->flashMessenger()->getCurrentSuccessMessages()),
+                'id' => $id
             )
         );
-
-//         $this->flashMessenger()->clearCurrentMessagesFromNamespace('success');
-//         $this->flashMessenger()->clearCurrentMessagesFromNamespace('error');
         
         if(empty($this->config['layoutName'])) {
             $viewModel->setTerminal(true);

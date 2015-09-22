@@ -67,9 +67,7 @@ class LoginController extends AbstractActionController
  
         $viewModel = new ViewModel(
             array(
-                'form' => $this->loginForm,
-                'errorMessages' =>  array_merge($this->flashMessenger()->getErrorMessages(), $this->flashMessenger()->getCurrentErrorMessages()),
-                'successMessages' => array_merge($this->flashMessenger()->getSuccessMessages(), $this->flashMessenger()->getCurrentSuccessMessages()),
+                'form' => $this->loginForm
             )
         );
         
