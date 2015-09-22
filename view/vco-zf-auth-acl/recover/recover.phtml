@@ -21,30 +21,14 @@
                     </div>
                     <div class="control-group">
                         <div class="controls">
-                            <?php
-                            if (!empty($this->successMessages)) {
-                                foreach ($this->successMessages as $msg) {
-                                    ?>
-                                    <div class="alert alert-success alert-dismissable">
-                                        <button type="button" class="close" data-dismiss="alert"
-                                                aria-hidden="true">&times;</button>
-                                        <?= $msg; ?>
-                                    </div>
-                                <?php
-                                }
-                            }
-                            if (!empty($this->errorMessages)) {
-                                foreach ($this->errorMessages as $msg) {
-                                    ?>
-                                    <div class="alert alert-error alert-dismissable">
-                                        <button type="button" class="close" data-dismiss="alert"
-                                                aria-hidden="true">&times;</button>
-                                        <?= $msg; ?>
-                                    </div>
-                                <?php
-                                }
-                            }
-                            ?>
+                        <?php
+                            $namespaces = array('error','success');
+                            foreach($namespaces as $namespace):
+                                echo $this->flashmessenger()->renderCurrent($namespace);
+                                $this->flashmessenger()->getPluginFlashMessenger()->clearCurrentMessagesFromNamespace($namespace);
+                                echo $this->flashmessenger()->render($namespace);
+                            endforeach;
+                        ?>
                         </div>
                     </div>
                     <div class="control-group">
