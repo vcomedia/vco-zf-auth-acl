@@ -87,8 +87,8 @@ class ResetController extends AbstractActionController
             )
         );
 
-        $this->flashMessenger()->clearCurrentMessagesFromNamespace('success');
-        $this->flashMessenger()->clearCurrentMessagesFromNamespace('error');
+//         $this->flashMessenger()->clearCurrentMessagesFromNamespace('success');
+//         $this->flashMessenger()->clearCurrentMessagesFromNamespace('error');
         
         if(empty($this->config['layoutName'])) {
             $viewModel->setTerminal(true);
