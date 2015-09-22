@@ -73,9 +73,6 @@ class LoginController extends AbstractActionController
             )
         );
         
-        $this->flashMessenger()->clearMessages('success');
-        $this->flashMessenger()->clearMessages('error');
-        
         if(empty($this->config['layoutName'])) {
             $viewModel->setTerminal(true);
         } else {
