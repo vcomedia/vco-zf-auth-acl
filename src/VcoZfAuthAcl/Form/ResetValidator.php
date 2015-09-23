@@ -32,13 +32,13 @@ class ResetValidator implements InputFilterAwareInterface
                             array('name' => 'StringTrim'),
                         ),
                         'validators' => array(
-//                             array(
-//                                 'name' => 'StringLength',
+                            array(
+                                'name' => '\VcoZfAuthAcl\Validator\PasswordStrength',
 //                                 'options' => array(
 //                                     'encoding' => 'UTF-8',
 //                                     'min' => '4',
 //                                 ),
-//                             ),
+                            ),
                         ),
                     )
                 )
