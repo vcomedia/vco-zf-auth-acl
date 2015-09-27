@@ -52,7 +52,8 @@ return array(
             'passwordResetEmailFooterText' => $translator->translate('Please note the link above is only valid for 1 hour.  If you did not request the password reset, you can safely ignore this email.'),
             'resetGuidInvalid' => $translator->translate('Link is invalid or has expired.  Please try again.'),
             'passwordUpdateSuccess' => $translator->translate('Password successfully updated.'),
-            'passwordConfirmNoMatch' => $translator->translate('Passwords do not match.')
+            'passwordConfirmNoMatch' => $translator->translate('Passwords do not match.'),
+            'loginFailedRateLimit' => $translator->translate('Too many failed login attempts.  Account temporarily locked.')
         ),
         'acl' => array(
             'roleProperty' => 'role', //property in user object to pull role from
