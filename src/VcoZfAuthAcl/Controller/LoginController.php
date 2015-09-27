@@ -10,6 +10,7 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\Crypt\Password\PasswordInterface;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\I18n\Translator;
+use VcoZfAuthAcl\Service\AuthRateLimitServiceInterface;
 
 class LoginController extends AbstractActionController
 {
@@ -23,14 +24,17 @@ class LoginController extends AbstractActionController
     
     protected $config;
     
+    protected $authRateLimitService;
+    
     public function __construct(AuthenticationService $authService, FormInterface $loginForm, 
-        InputFilterAwareInterface $loginFormValidator, Translator $translator, array $config) 
+        InputFilterAwareInterface $loginFormValidator, Translator $translator, array $config, AuthRateLimitServiceInterface $authRateLimitService = null) 
     {
         $this->authService = $authService;
         $this->loginForm = $loginForm;
         $this->loginFormValidator = $loginFormValidator;
         $this->translator = $translator;
         $this->config = $config;
+        $this->authRateLimitService = $authRateLimitService;
     }
     
     /**
@@ -50,15 +54,28 @@ class LoginController extends AbstractActionController
             $this->loginForm->setData($request->getPost());
  
             if ($this->loginForm->isValid()) {
-                $this->loginFormData = $this->loginForm->getData();
-                $authAdapter = $this->authService->getAdapter();
-                $authAdapter->setIdentity($this->loginFormData['identity']);
-                $authAdapter->setCredential($this->loginFormData['password']);
-                $authenticationResult = $this->authService->authenticate();
+                $loginFormData = $this->loginForm->getData();
                 
-                if ($authenticationResult->isValid()) {
-                    //$identity = $authenticationResult->getIdentity();        
-                    return $this->redirect()->toRoute($this->config['onLoginRedirectRouteName']);
+                $authAdapter = $this->authService->getAdapter();
+                $authAdapter->setIdentity($identity);
+                $authAdapter->setCredential($loginFormData['password']);
+                
+                $identity = $loginFormData['identity'];
+                $identityParameter = $authAdapter->getOptions()->getIdentityParameter();
+                
+                //check if too many auth attempts
+                if($this->authRateLimitService && $this->authRateLimitService->isAuthRateLimitExceeded($identity, $identityParameter)){
+                    
+                } else {    //otherwise ok to attempt login          
+                    $authenticationResult = $this->authService->authenticate();
+                    
+                    if ($authenticationResult->isValid()) {
+                        //$identity = $authenticationResult->getIdentity();        
+                        return $this->redirect()->toRoute($this->config['onLoginRedirectRouteName']);
+                    } else if($this->authRateLimitService){
+                        //register failed auth attempt
+                        $this->authRateLimitService->regsiterFailedLogin($identity, $identityParameter);
+                    }
                 }
             }
              

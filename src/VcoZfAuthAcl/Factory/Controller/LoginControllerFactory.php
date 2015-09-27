@@ -25,7 +25,9 @@ class LoginControllerFactory implements FactoryInterface {
         $loginFormValidator = new LoginValidator();
         
         $translator = $realServiceLocator->get('MVCTranslator');
+        $authRateLimitService = !empty($config['authRateLimitService']) ? $realServiceLocator->get($config['authRateLimitService']) : null;
+        
 
-        return new LoginController($authService, $loginForm, $loginFormValidator, $translator, $config['VcoZfAuthAcl']);
+        return new LoginController($authService, $loginForm, $loginFormValidator, $translator, $config['VcoZfAuthAcl'], $authRateLimitService);
     }
 }

@@ -21,6 +21,7 @@ return array(
         'userService' => 'Application\UserService',
         'userEmailAddressProperty' => 'email',  //user object property referencing email address for recover password email
         'smtpTransportService' => 'mail.transport',
+        'authRateLimitService' => 'Application\AuthRateLimitService',  //return false if you don't want rate limiting.  otherwise, implement AuthRateLimitServiceInterface and see class name here
         'unauthorizedTemplate' => 'vco-zf-auth-acl/error/403',
         'onLoginRedirectRouteName' => 'home',
         'layoutName' => 'layout/layout-empty', // set to false to not render layout

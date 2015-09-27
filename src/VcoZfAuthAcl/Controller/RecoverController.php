@@ -64,9 +64,9 @@ class RecoverController extends AbstractActionController
             $this->recoverForm->setData($request->getPost());
  
             if ($this->recoverForm->isValid()) {
-                $this->recoverFormData = $this->recoverForm->getData();
+                $recoverFormData = $this->recoverForm->getData();
                 $identityProperty = $this->authService->getAdapter()->getOptions()->getIdentityProperty();
-                $userObject = $this->userService->setPasswordReset($this->recoverFormData['identity'], $identityProperty);
+                $userObject = $this->userService->setPasswordReset($recoverFormData['identity'], $identityProperty);
                 $getter = 'get' . ucfirst($this->config['userEmailAddressProperty']);
                 if (method_exists($userObject, $getter)) {
                     $emailAddress = $userObject->$getter();
@@ -90,7 +90,7 @@ class RecoverController extends AbstractActionController
                         ->setVariables(array(
                             'user' => $userObject, 
                             'identityProperty' => $identityProperty, 
-                            'identityValue' => $this->recoverFormData['identity'],
+                            'identityValue' => $recoverFormData['identity'],
                             'email' => $emailAddress,
                             'config' => $this->config
                         ));

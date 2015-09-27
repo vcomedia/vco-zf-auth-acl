@@ -66,8 +66,8 @@ class ResetController extends AbstractActionController
             $this->resetForm->setData($request->getPost());
  
             if ($this->resetForm->isValid()) {
-                $this->resetFormData = $this->resetForm->getData();
-                $user->setPassword($this->passwordService->create($this->resetFormData['password']));
+                $resetFormData = $this->resetForm->getData();
+                $user->setPassword($this->passwordService->create($resetFormData['password']));
                 $user->setPasswordReset(null);
                 $this->userService->saveUser($user);
                 
