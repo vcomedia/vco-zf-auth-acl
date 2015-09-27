@@ -59,10 +59,10 @@ class LoginController extends AbstractActionController
                 $authAdapter = $this->authService->getAdapter();
                 
                 $identity = $loginFormData['identity'];
-                $identityParameter = $authAdapter->getOptions()->getIdentityParameter();
+                $identityProperty = $authAdapter->getOptions()->getIdentityProperty();
                 
                 //check if too many auth attempts
-                if($this->authRateLimitService && $this->authRateLimitService->isAuthRateLimitExceeded($identity, $identityParameter)){
+                if($this->authRateLimitService && $this->authRateLimitService->isAuthRateLimitExceeded($identity, $identityProperty)){
                     $this->flashMessenger()->addErrorMessage($this->translator->translate($this->config['messages']['loginFailedRateLimit']));
                 } else {    //otherwise ok to attempt login          
                     $authAdapter->setIdentity($identity);
@@ -76,7 +76,7 @@ class LoginController extends AbstractActionController
                         //register failed auth attempt
                         $this->flashMessenger()->addErrorMessage($this->translator->translate($this->config['messages']['emailPasswordNoMatch']));
                         if($this->authRateLimitService) {
-                            $this->authRateLimitService->regsiterFailedLogin($identity, $identityParameter);
+                            $this->authRateLimitService->regsiterFailedLogin($identity, $identityProperty);
                         }
                     }
                 }
