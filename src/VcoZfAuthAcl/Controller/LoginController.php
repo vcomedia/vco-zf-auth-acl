@@ -65,21 +65,22 @@ class LoginController extends AbstractActionController
                 
                 //check if too many auth attempts
                 if($this->authRateLimitService && $this->authRateLimitService->isAuthRateLimitExceeded($identity, $identityParameter)){
-                    
+                    $this->flashMessenger()->addErrorMessage($this->translator->translate($this->config['messages']['loginFailedRateLimit']));
                 } else {    //otherwise ok to attempt login          
                     $authenticationResult = $this->authService->authenticate();
                     
                     if ($authenticationResult->isValid()) {
                         //$identity = $authenticationResult->getIdentity();        
                         return $this->redirect()->toRoute($this->config['onLoginRedirectRouteName']);
-                    } else if($this->authRateLimitService){
+                    } else {
                         //register failed auth attempt
-                        $this->authRateLimitService->regsiterFailedLogin($identity, $identityParameter);
+                        $this->flashMessenger()->addErrorMessage($this->translator->translate($this->config['messages']['emailPasswordNoMatch']));
+                        if($this->authRateLimitService) {
+                            $this->authRateLimitService->regsiterFailedLogin($identity, $identityParameter);
+                        }
                     }
                 }
             }
-             
-            $this->flashMessenger()->addErrorMessage($this->translator->translate($this->config['messages']['emailPasswordNoMatch']));
         }
  
         $viewModel = new ViewModel(
@@ -87,9 +88,6 @@ class LoginController extends AbstractActionController
                 'form' => $this->loginForm
             )
         );
-        
-//         $this->flashMessenger()->clearCurrentMessagesFromNamespace('success');
-//         $this->flashMessenger()->clearCurrentMessagesFromNamespace('error');
         
         if(empty($this->config['layoutName'])) {
             $viewModel->setTerminal(true);
