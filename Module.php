@@ -159,7 +159,7 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
             } elseif (property_exists($userObject, $roleProperty)) {
                 $userRole = $userObject->{$roleProperty};
             } else {
-                throw new Exception\UnexpectedValueException(
+                throw new \UnexpectedValueException(
                     sprintf(
                         'Property (%s) in (%s) is not accessible. You should implement %s::%s()',
                         $roleProperty,

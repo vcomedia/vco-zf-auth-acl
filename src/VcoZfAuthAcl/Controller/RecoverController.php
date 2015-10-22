@@ -73,7 +73,7 @@ class RecoverController extends AbstractActionController
                 } elseif (property_exists($userObject, $roleProperty)) {
                     $emailAddress = $userObject->{$identityProperty};
                 } else {
-                    throw new Exception\UnexpectedValueException(
+                    throw new \UnexpectedValueException(
                         sprintf(
                             'Property (%s) in (%s) is not accessible. You should implement %s::%s()',
                             $identityProperty,
