@@ -149,8 +149,7 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
         
         $userRole = $config['VcoZfAuthAcl']['acl']['defaultRole'];
         
-        if($authService->hasIdentity()) {
-            $userObject = $authService->getStorage()->read();//$authService->getStorage()->read()->getRole();
+        if($authService->hasIdentity() && $userObject = $authService->getStorage()->read()) {
             $roleProperty = $config['VcoZfAuthAcl']['acl']['roleProperty'];
             $getter             = 'get' . ucfirst($roleProperty);
             //$userRole = $authService->getStorage()->read()->getRole();
