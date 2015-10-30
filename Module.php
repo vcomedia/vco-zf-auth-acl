@@ -168,6 +168,8 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
                     )
                 );
             }
+        } else if ($authService->hasIdentity()) {  //user was disabled/deleted, log them out
+            $authService->clearIdentity();
         }
      
         if (!$e->getViewModel()->acl->isAllowed($userRole, $resourceName, $actionName)) {
