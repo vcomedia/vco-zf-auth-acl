@@ -16,12 +16,11 @@ class PasswordStrength extends AbstractValidator
         parent::__construct($options);
     }
     
-    
     protected $messageTemplates = array(
-        self::LENGTH => "'%value%' must be at least 8 characters in length",
-        self::UPPER  => "'%value%' must contain at least one uppercase letter",
-        self::LOWER  => "'%value%' must contain at least one lowercase letter",
-        self::DIGIT  => "'%value%' must contain at least one digit character"
+        self::LENGTH => "Password must be at least 8 characters in length",
+        self::UPPER  => "Password must contain at least one uppercase letter",
+        self::LOWER  => "Password must contain at least one lowercase letter",
+        self::DIGIT  => "Password must contain at least one digit character"
     );
 
     public function isValid($value)
