@@ -4,6 +4,7 @@ namespace VcoZfAuthAcl\View\Helper;
 use Zend\View\Helper\AbstractHelper;
 use Zend\Permissions\Acl\AclInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
+use Zend\Permissions\Acl\Role\GenericRole;
 
 /**
  * Class IsAllowed
