@@ -34,7 +34,7 @@ class IsAllowed extends AbstractHelper
     public function __construct($config = null) {
         if(is_array($config)) {
             if(isset($config['acl']) && !empty($config['acl']['defaultRole'])) {
-                $this->setDefaultRole($config['acl']['defaultRole']);
+                $this->setDefaultRole(new GenericRole($config['acl']['defaultRole']));
             }
         }
         if(isset($this->view->acl)) {
