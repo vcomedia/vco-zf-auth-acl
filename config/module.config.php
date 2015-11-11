@@ -31,5 +31,10 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view'
         )
+    ),
+    'view_helpers' => array(
+        'factories' => array(
+            'isAllowed' => 'VcoZfAuthAcl\Factory\View\Helper\IsAllowedFactory',
+        )       
     )
 );
