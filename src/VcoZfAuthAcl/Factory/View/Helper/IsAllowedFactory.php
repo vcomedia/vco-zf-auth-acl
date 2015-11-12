@@ -10,6 +10,7 @@ class IsAllowedFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator) {
         $sm = $serviceLocator->getServiceLocator();
         $config = $sm->get('Config');
-        return new IsAllowed($config['VcoZfAuthAcl']);
+        $authService = $realServiceLocator->get('Zend\Authentication\AuthenticationService');
+        return new IsAllowed($authService, $config['VcoZfAuthAcl']);
     }
 }
