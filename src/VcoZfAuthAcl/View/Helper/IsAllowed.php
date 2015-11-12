@@ -6,6 +6,7 @@ use Zend\Permissions\Acl\AclInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\Permissions\Acl\Role\GenericRole;
 use Zend\Authentication\AuthenticationServiceInterface;
+use Zend\Permissions\Acl\Resource\GenericResource;
 
 /**
  * Class IsAllowed
