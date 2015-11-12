@@ -23,6 +23,7 @@ return array(
             'VcoZfAuthAcl\passwordService' => 'Zend\Crypt\Password\Bcrypt'  // used to hash and verify passwords
         ),
         'factories' => array(
+            'VcoZfAuthAcl\Service\AclServiceInterface' => 'VcoZfAuthAcl\Factory\Service\AclServiceFactory',
             'Zend\Authentication\AuthenticationService' => 'VcoZfAuthAcl\Factory\Authentication\AuthenticationServiceFactory',
             'VcoZfAuthAcl\View\UnauthorizedStrategy' => 'VcoZfAuthAcl\Factory\UnauthorizedStrategyServiceFactory'
         )

@@ -38,7 +38,7 @@ class IsAllowed extends AbstractHelper
      */
     protected static $defaultRole;
 
-    public function __construct(AuthenticationServiceInterface $authService, $config = null) {
+    public function __construct(AuthenticationServiceInterface $authService, AclInterface $acl, $config = null) {
         $this->authService = $authService;
         
         if(is_array($config)) {
@@ -50,10 +50,9 @@ class IsAllowed extends AbstractHelper
                 $this->setDefaultRole($defaultRole);
             }
         }
-        if(isset($this->view->acl)) {
-            $this->setAcl($this->view->acl);
-            $this->setDefaultAcl($this->view->acl);           
-        }
+        
+        $this->setAcl($acl);
+        $this->setDefaultAcl($acl);
         
         $identity = $this->authService->getIdentity();
         if($identity) {
