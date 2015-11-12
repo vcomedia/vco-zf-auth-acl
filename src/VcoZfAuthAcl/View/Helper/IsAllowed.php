@@ -35,7 +35,11 @@ class IsAllowed extends AbstractHelper
     public function __construct($config = null) {
         if(is_array($config)) {
             if(isset($config['acl']) && !empty($config['acl']['defaultRole'])) {
-                $this->setDefaultRole(new GenericRole($config['acl']['defaultRole']));
+                $defaultRole = $config['acl']['defaultRole'];
+                if(!$defaultRole instanceof RoleInterface) {
+                    $defaultRole = new GenericRole($defaultRole);
+                }
+                $this->setDefaultRole($defaultRole);
             }
         }
         if(isset($this->view->acl)) {
@@ -43,7 +47,7 @@ class IsAllowed extends AbstractHelper
             $this->setDefaultAcl($this->view->acl);           
         }
         
-        $identity = $this->view->identity();
+        $identity = $this->view->plugin('identity');
         die($identity->getRole() . 'sss');
     }
         
