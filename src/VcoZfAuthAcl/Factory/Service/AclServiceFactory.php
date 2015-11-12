@@ -6,7 +6,7 @@ use Zend\ServiceManager\FactoryInterface;
 use VcoZfAuthAcl\Service\AclService;
 use Zend\Permissions\Acl\Acl;
 
-class ProductServiceFactory implements FactoryInterface
+class AclServiceFactory implements FactoryInterface
 {
     public function createService(ServiceLocatorInterface $serviceLocator) {
         $acl = new Acl();
