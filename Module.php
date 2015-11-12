@@ -53,7 +53,12 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
      */
     public function initAcl(MvcEvent $e, $config)
     {
-        $acl = new Acl();
+        $app = $e->getApplication();
+        $eventManager = $app->getEventManager();
+        $serviceManager = $app->getServiceManager();
+        
+        $aclService = $serviceManager->get('VcoZfAuthAcl\Service\AclServiceInterface');
+        $acl = $aclService->getAcl();
         //deny everything by default
         $acl->deny();
         
