@@ -5,6 +5,7 @@ use Zend\View\Helper\AbstractHelper;
 use Zend\Permissions\Acl\AclInterface;
 use Zend\Permissions\Acl\Role\RoleInterface;
 use Zend\Permissions\Acl\Role\GenericRole;
+use Zend\Authentication\AuthenticationServiceInterface;
 
 /**
  * Class IsAllowed
@@ -12,6 +13,11 @@ use Zend\Permissions\Acl\Role\GenericRole;
  */
 class IsAllowed extends AbstractHelper
 {
+    /**
+     * @var AuthenticationServiceInterface
+     */
+    protected $authService;
+    
     /**
      * @var AclInterface
      */
@@ -32,7 +38,9 @@ class IsAllowed extends AbstractHelper
      */
     protected static $defaultRole;
 
-    public function __construct($config = null) {
+    public function __construct(AuthenticationServiceInterface $authService, $config = null) {
+        $this->authService = $authService;
+        
         if(is_array($config)) {
             if(isset($config['acl']) && !empty($config['acl']['defaultRole'])) {
                 $defaultRole = $config['acl']['defaultRole'];
@@ -47,8 +55,14 @@ class IsAllowed extends AbstractHelper
             $this->setDefaultAcl($this->view->acl);           
         }
         
-        $identity = $this->view->plugin('identity');
-        die($identity->getRole() . 'sss');
+        $identity = $this->authService->getIdentity();
+        if($identity) {
+            $role = $identity->getRole();
+            if(!$role instanceof RoleInterface) {
+                $role = new GenericRole($role);
+            }
+            $this->setRole($role);
+        }
     }
         
     /**
