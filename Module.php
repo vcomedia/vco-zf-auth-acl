@@ -206,7 +206,7 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
                 $e->setParam('controller', $controllerName);
                 $e->setParam('action', $actionName);
         
-                $errorMessage = sprintf("You are not authorized to access resource %s on %s:%s:%s as %s", $resourceName, $moduleName, $controllerName, $actionName, $userRole);
+                $errorMessage = sprintf("You are not authorized to access %s:%s:%s", $moduleName, $controllerName, $actionName);
                 $e->setParam('exception', new \VcoZfAuthAcl\Exception\UnAuthorizedException($errorMessage));
                 $e->getTarget()->getEventManager()->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $e);
             }
