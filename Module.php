@@ -12,7 +12,6 @@
 namespace VcoZfAuthAcl;
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\ServiceProviderInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\EventManager\EventInterface;
@@ -59,6 +58,7 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
         
         $aclService = $serviceManager->get('VcoZfAuthAcl\Service\AclServiceInterface');
         $acl = $aclService->getAcl();
+        /* @var $acl Acl */
         //deny everything by default
         $acl->deny();
         
@@ -128,9 +128,6 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
                 $acl->deny($denial['roles'], $denial['resources'], $denial['privileges'], $assertion);
             }
         }
-        
-        //set to view
-        $e->getViewModel()->acl = $acl;
     }
 
     /**
@@ -176,8 +173,11 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
         } else if ($authService->hasIdentity()) {  //user was disabled/deleted, log them out
             $authService->clearIdentity();
         }
+        
+        $aclService = $serviceManager->get('VcoZfAuthAcl\Service\AclServiceInterface');
+        $acl = $aclService->getAcl();
      
-        if (!$e->getViewModel()->acl->isAllowed($userRole, $resourceName, $actionName)) {
+        if (!$acl->isAllowed($userRole, $resourceName, $actionName)) {
              $response = $e->getResponse();
              $request = $e->getRequest();
              $router = $e->getRouter();
@@ -206,7 +206,7 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
                 $e->setParam('controller', $controllerName);
                 $e->setParam('action', $actionName);
         
-                $errorMessage = sprintf("You are not authorized to access %s:%s:%s", $moduleName, $controllerName, $actionName);
+                $errorMessage = sprintf("You are not authorized to access resource %s on %s:%s:%s as %s", $resourceName, $moduleName, $controllerName, $actionName, $userRole);
                 $e->setParam('exception', new \VcoZfAuthAcl\Exception\UnAuthorizedException($errorMessage));
                 $e->getTarget()->getEventManager()->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $e);
             }
