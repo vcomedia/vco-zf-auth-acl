@@ -72,7 +72,7 @@ class LoginController extends AbstractActionController
                     
                     if ($authenticationResult->isValid()) { 
                         $container = new Container('VcoZfAuthAcl');
-                        if(!$container->offsetExists('loginRedirectUrl')) {
+                        if($container->offsetExists('loginRedirectUrl')) {
                             $loginRedirectUrl = $container->offsetGet('loginRedirectUrl');
                             $container->offsetUnset('loginRedirectUrl');
                             return $this->redirect()->toUrl($loginRedirectUrl);
