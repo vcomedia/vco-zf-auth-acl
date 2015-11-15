@@ -141,6 +141,9 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
         $serviceManager = $app->getServiceManager();
         $matches = $e->getRouteMatch();
         $controllerParams = explode("\\", $matches->getParam('controller'));
+        if(count($controllerParams) < 3) {
+            throw new \Exception("Namespace missing from route.");
+        }
         $moduleName = $controllerParams[0];
         $controllerName = $controllerParams[2];
         $actionName = $matches->getParam('action');
