@@ -186,8 +186,10 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
              $request = $e->getRequest();
              $router = $e->getRouter();
              if (!$authService->hasIdentity()) {
-                $container = new Container('VcoZfAuthAcl');
-                $container->offsetSet('loginRedirectUrl', $this->url());
+                if(!empty($_SERVER['REQUEST_URI'])) {
+                    $container = new Container('VcoZfAuthAcl');
+                    $container->offsetSet('loginRedirectUrl', $_SERVER['REQUEST_URI']);
+                }
                 $response->getHeaders()->addHeaderLine('Auth-Required', 1);
                 $url = $router->assemble(array(), array('name' => 'login'));
                 
