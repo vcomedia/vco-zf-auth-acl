@@ -21,6 +21,7 @@ use Zend\Permissions\Acl\Role\GenericRole;
 use Zend\Permissions\Acl\Resource\GenericResource;
 use Zend\Permissions\Acl\Assertion\AssertionAggregate;
 use Zend\Mvc\Application;
+use Zend\Session\Container;
 
 /**
  * Class Module
@@ -185,6 +186,8 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
              $request = $e->getRequest();
              $router = $e->getRouter();
              if (!$authService->hasIdentity()) {
+                $container = new Container('VcoZfAuthAcl');
+                $container->offsetSet('loginRedirectUrl', $this->url());
                 $response->getHeaders()->addHeaderLine('Auth-Required', 1);
                 $url = $router->assemble(array(), array('name' => 'login'));
                 

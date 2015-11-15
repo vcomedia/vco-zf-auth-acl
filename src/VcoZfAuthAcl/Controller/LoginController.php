@@ -11,6 +11,7 @@ use Zend\Crypt\Password\PasswordInterface;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\Mvc\I18n\Translator;
 use VcoZfAuthAcl\Service\AuthRateLimitServiceInterface;
+use Zend\Session\Container;
 
 class LoginController extends AbstractActionController
 {
@@ -69,9 +70,15 @@ class LoginController extends AbstractActionController
                     $authAdapter->setCredential($loginFormData['password']);
                     $authenticationResult = $this->authService->authenticate();
                     
-                    if ($authenticationResult->isValid()) {
-                        //$identity = $authenticationResult->getIdentity();        
-                        return $this->redirect()->toRoute($this->config['onLoginRedirectRouteName']);
+                    if ($authenticationResult->isValid()) { 
+                        $container = new Container('VcoZfAuthAcl');
+                        if(!$container->offsetExists('loginRedirectUrl')) {
+                            $loginRedirectUrl = $container->offsetGet('loginRedirectUrl');
+                            $container->offsetUnset('loginRedirectUrl');
+                            return $this->redirect()->toUrl($loginRedirectUrl);
+                        } else {
+                            return $this->redirect()->toRoute($this->config['onLoginRedirectRouteName']);
+                        }
                     } else {
                         //register failed auth attempt
                         $this->flashMessenger()->addErrorMessage($this->translator->translate($this->config['messages']['emailPasswordNoMatch']));
