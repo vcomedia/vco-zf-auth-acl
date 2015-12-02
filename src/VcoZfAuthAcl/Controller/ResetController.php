@@ -3,7 +3,6 @@ namespace VcoZfAuthAcl\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Authentication\Adapter\DbTable as AuthAdapter;
 use Zend\Authentication\AuthenticationService;
 use Zend\Form\FormInterface;
 use Zend\InputFilter\InputFilterAwareInterface;

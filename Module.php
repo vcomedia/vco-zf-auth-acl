@@ -188,8 +188,7 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
              if (!$authService->hasIdentity()) {
                 if(!empty($_SERVER['HTTP_HOST']) && !empty($_SERVER['REQUEST_URI'])) {
                     $container = new Container('VcoZfAuthAcl');
-                    $redirectUrl = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https://' : 'http://';
-                    $redirectUrl .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+                    $redirectUrl = '//' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
                     $container->offsetSet('loginRedirectUrl', $redirectUrl);
                 }
                 $response->getHeaders()->addHeaderLine('Auth-Required', 1);

@@ -67,24 +67,25 @@ class RecoverController extends AbstractActionController
                 $recoverFormData = $this->recoverForm->getData();
                 $identityProperty = $this->authService->getAdapter()->getOptions()->getIdentityProperty();
                 $userObject = $this->userService->setPasswordReset($recoverFormData['identity'], $identityProperty);
-                $getter = 'get' . ucfirst($this->config['userEmailAddressProperty']);
-                if (method_exists($userObject, $getter)) {
-                    $emailAddress = $userObject->$getter();
-                } elseif (property_exists($userObject, $roleProperty)) {
-                    $emailAddress = $userObject->{$identityProperty};
-                } else {
-                    throw new \UnexpectedValueException(
-                        sprintf(
-                            'Property (%s) in (%s) is not accessible. You should implement %s::%s()',
-                            $identityProperty,
-                            get_class($userObject),
-                            get_class($userObject),
-                            $getter
-                        )
-                    );
-                }
                 
                 if($userObject) {
+                    $getter = 'get' . ucfirst($this->config['userEmailAddressProperty']);
+                    if (method_exists($userObject, $getter)) {
+                        $emailAddress = $userObject->$getter();
+                    } elseif (property_exists($userObject, $roleProperty)) {
+                        $emailAddress = $userObject->{$identityProperty};
+                    } else {
+                        throw new \UnexpectedValueException(
+                            sprintf(
+                                'Property (%s) in (%s) is not accessible. You should implement %s::%s()',
+                                $identityProperty,
+                                get_class($userObject),
+                                get_class($userObject),
+                                $getter
+                            )
+                        );
+                    }
+                
                     $emailView = new ViewModel();
                     $emailView->setTemplate($this->config['viewPath']['emailTemplate'])
                         ->setVariables(array(
