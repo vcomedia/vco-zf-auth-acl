@@ -66,6 +66,7 @@ class RecoverController extends AbstractActionController
             if ($this->recoverForm->isValid()) {
                 $recoverFormData = $this->recoverForm->getData();
                 $identityProperty = $this->authService->getAdapter()->getOptions()->getIdentityProperty();
+                $roleProperty = $this->config['acl']['roleProperty'];
                 $userObject = $this->userService->setPasswordReset($recoverFormData['identity'], $identityProperty);
                 
                 if($userObject) {
