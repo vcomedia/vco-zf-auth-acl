@@ -26,14 +26,15 @@ return array(
         'onLoginRedirectRouteName' => 'home',
         'layoutName' => 'layout/layout-empty', // set to false to not render layout
         'viewPath' => array(
-            'login' => 'storefront/auth/login.phtml', // vco-zf-auth-acl/login/login.phtml
-            'recover' => 'storefront/auth/recover.phtml',
-            'reset' => 'storefront/auth/reset.phtml',
+            'login' => 'vco-zf-auth-acl/login/login.phtml', // vco-zf-auth-acl/login/login.phtml
+            'recover' => 'vco-zf-auth-acl/recover/recover.phtml',
+            'reset' => 'vco-zf-auth-acl/reset/reset.phtml',
             'emailLayout' => 'layout/layout-email.phtml', //set to false to not render email in layout
             'emailTemplate' => 'vco-zf-auth-acl/email/recover.phtml'
         ),
         'messages' => array(
             'logoutSuccess' => $translator->translate("You've been logged out."),
+            'loginSuccess' => $translator->translate("You've successfully logged in."),
             'emailPasswordNoMatch' => $translator->translate("Email and password do not match."),
             'identityFieldLabel' => $translator->translate('Email Address'),
             'identityFieldPlaceholder' => $translator->translate('Email Address'),
