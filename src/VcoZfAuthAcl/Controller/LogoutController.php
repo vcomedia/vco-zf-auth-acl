@@ -5,6 +5,7 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Authentication\AuthenticationService;
 use Zend\Mvc\I18n\Translator;
+use Zend\View\Model\JsonModel;
  
 class LogoutController extends AbstractActionController
 {
@@ -27,9 +28,22 @@ class LogoutController extends AbstractActionController
      */
     public function logoutAction()
     {
+        $request = $this->getRequest();
+                
         $this->authService->clearIdentity();
- 
-        $this->flashmessenger()->addSuccessMessage($this->translator->translate($this->config['messages']['logoutSuccess']));
-        return $this->redirect()->toRoute('login');
+        $logOutMessage = $this->translator->translate($this->config['messages']['logoutSuccess']);
+        
+        if($request->isXmlHttpRequest()) {
+           $jsonResponse = new JsonModel(
+                array(
+            	    'message' => $logOutMessage,
+                    'success'=>true,
+                )
+            );
+            return $jsonResponse;
+        } else {
+            $this->flashmessenger()->addSuccessMessage($logOutMessage);
+            return $this->redirect()->toRoute('login');
+        }
     }
 }

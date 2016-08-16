@@ -9,6 +9,7 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\Mvc\I18n\Translator;
 use VcoZfAuthAcl\Service\AuthRateLimitServiceInterface;
 use Zend\Session\Container;
+use Zend\View\Model\JsonModel;
 
 class LoginController extends AbstractActionController
 {
@@ -61,13 +62,32 @@ class LoginController extends AbstractActionController
                 
                 //check if too many auth attempts
                 if($this->authRateLimitService && $this->authRateLimitService->isAuthRateLimitExceeded($identity, $identityProperty)){
-                    $this->flashMessenger()->addErrorMessage($this->translator->translate($this->config['messages']['loginFailedRateLimit']));
+                    $errorRateLimitMessage = $this->translator->translate($this->config['messages']['loginFailedRateLimit']);
+                    if($request->isXmlHttpRequest()) {
+                        $jsonResponse = new JsonModel(
+                            array(
+                        	    'message' => $errorRateLimitMessage,
+                                'success'=>false,
+                            )
+                        );
+                        return $jsonResponse;                        
+                    } else {
+                        $this->flashMessenger()->addErrorMessage($errorRateLimitMessage);
+                    }
                 } else {    //otherwise ok to attempt login          
                     $authAdapter->setIdentity($identity);
                     $authAdapter->setCredential($loginFormData['password']);
                     $authenticationResult = $this->authService->authenticate();
                     
-                    if ($authenticationResult->isValid()) { 
+                    if ($authenticationResult->isValid() && $request->isXmlHttpRequest()) { 
+                        $jsonResponse = new JsonModel(
+                            array(
+                        	    'message' => 'Successfully logged in.',
+                                'success'=>true,
+                            )
+                        );
+                        return $jsonResponse;
+                    } else if ($authenticationResult->isValid()) { 
                         $container = new Container('VcoZfAuthAcl');
                         if($container->offsetExists('loginRedirectUrl')) {
                             $loginRedirectUrl = $container->offsetGet('loginRedirectUrl');
@@ -78,9 +98,20 @@ class LoginController extends AbstractActionController
                         }
                     } else {
                         //register failed auth attempt
-                        $this->flashMessenger()->addErrorMessage($this->translator->translate($this->config['messages']['emailPasswordNoMatch']));
                         if($this->authRateLimitService) {
                             $this->authRateLimitService->regsiterFailedLogin($identity, $identityProperty);
+                        }
+                        $emailPasswordNoMatchMessage = $this->translator->translate($this->config['messages']['emailPasswordNoMatch']);
+                        if($request->isXmlHttpRequest()) {
+                            $jsonResponse = new JsonModel(
+                                array(
+                            	    'message' => $emailPasswordNoMatchMessage,
+                                    'success'=>false,
+                                )
+                            );
+                            return $jsonResponse;                               
+                        } else {
+                            $this->flashMessenger()->addErrorMessage($emailPasswordNoMatchMessage);
                         }
                     }
                 }
