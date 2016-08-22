@@ -66,6 +66,7 @@ class LoginController extends AbstractActionController
                     if($request->isXmlHttpRequest()) {
                         $jsonResponse = new JsonModel(
                             array(
+                                'code' => 'error-rate-limit',
                         	    'message' => $errorRateLimitMessage,
                                 'success'=>false,
                             )
@@ -82,6 +83,7 @@ class LoginController extends AbstractActionController
                     if ($authenticationResult->isValid() && $request->isXmlHttpRequest()) { 
                         $jsonResponse = new JsonModel(
                             array(
+                                'code' => 'login-success',
                         	    'message' => 'Successfully logged in.',
                                 'success'=>true,
                             )
@@ -105,6 +107,7 @@ class LoginController extends AbstractActionController
                         if($request->isXmlHttpRequest()) {
                             $jsonResponse = new JsonModel(
                                 array(
+                                    'code' => 'email-password-nomatch',
                             	    'message' => $emailPasswordNoMatchMessage,
                                     'success'=>false,
                                 )
