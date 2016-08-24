@@ -118,6 +118,16 @@ class LoginController extends AbstractActionController
                         }
                     }
                 }
+            } else if($request->isXmlHttpRequest()) {  //invalid input
+                $messages = $this->loginForm->getMessages();
+                $jsonResponse = new JsonModel(
+                    array(
+                        'code' => 'invalid-input',
+                	    'message' => $messages,
+                        'success'=>false,
+                    )
+                );
+                return $jsonResponse; 
             }
         }
  
