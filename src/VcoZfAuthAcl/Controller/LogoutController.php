@@ -28,22 +28,23 @@ class LogoutController extends AbstractActionController
      */
     public function logoutAction()
     {
-        $request = $this->getRequest();
-                
+        $request = $this->getRequest();    
         $this->authService->clearIdentity();
         $logOutMessage = $this->translator->translate($this->config['messages']['logoutSuccess']);
         
         if($request->isXmlHttpRequest()) {
            $jsonResponse = new JsonModel(
                 array(
+                    'code' => 'logout-success',
             	    'message' => $logOutMessage,
                     'success'=>true,
                 )
             );
             return $jsonResponse;
         } else {
+            $redirect = $this->getRequest()->getQuery('redirect');
             $this->flashmessenger()->addSuccessMessage($logOutMessage);
-            return $this->redirect()->toRoute('login');
+            return !empty($redirect) ? $this->redirect()->toUrl($redirect) : $this->redirect()->toRoute('login');
         }
     }
 }
