@@ -181,7 +181,17 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
         $aclService = $serviceManager->get('VcoZfAuthAcl\Service\AclServiceInterface');
         $acl = $aclService->getAcl();
      
-        if (!$acl->isAllowed($userRole, $resourceName, $actionName)) {
+        if(!$acl->hasResource($resourceName)) {
+            $e->setError(Application::ERROR_EXCEPTION);
+            $e->setParam('identity', $authService->getIdentity());
+            $e->setParam('controller', $controllerName);
+            $e->setParam('action', $actionName);
+            $e->setParam('resource', $resourceName);
+    
+            $errorMessage = sprintf("Resource with name %s does not exist.", $resourceName);
+            $e->setParam('exception', new \VcoZfAuthAcl\Exception\UnAuthorizedException($errorMessage));
+            $e->getTarget()->getEventManager()->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $e);
+        } else if (!$acl->isAllowed($userRole, $resourceName, $actionName)) {
              $response = $e->getResponse();
              $request = $e->getRequest();
              $router = $e->getRouter();
