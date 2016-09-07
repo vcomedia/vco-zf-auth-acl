@@ -182,7 +182,7 @@ class Module implements ConfigProviderInterface, BootstrapListenerInterface, Aut
         $acl = $aclService->getAcl();
      
         if(!$acl->hasResource($resourceName)) {
-            $e->setError(Application::ERROR_EXCEPTION);
+            $e->setError(Application::ERROR_ROUTER_NO_MATCH);
             $e->setParam('identity', $authService->getIdentity());
             $e->setParam('controller', $controllerName);
             $e->setParam('action', $actionName);
