@@ -23,7 +23,7 @@ class ResetControllerFactory implements FactoryInterface {
         $userService = $realServiceLocator->get($config['VcoZfAuthAcl']['userService']);
         
         $resetForm = new Reset($config['VcoZfAuthAcl']);
-        $resetFormValidator = new ResetValidator();
+        $resetFormValidator = new ResetValidator($config['VcoZfAuthAcl']['passwordStrengthOptions']);
         
         $translator = $realServiceLocator->get('MVCTranslator');
         $passwordService = $realServiceLocator->get('VcoZfAuthAcl\passwordService');

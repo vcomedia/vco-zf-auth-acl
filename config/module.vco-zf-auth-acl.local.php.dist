@@ -56,6 +56,14 @@ return array(
             'passwordConfirmNoMatch' => $translator->translate('Passwords do not match.'),
             'loginFailedRateLimit' => $translator->translate('Too many failed login attempts.  Account temporarily locked.')
         ),
+        'passwordStrengthOptions' => array( 
+            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_MIN_LENGTH => 8,
+            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_REQUIRE_UPPER => true,
+            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_REQUIRE_LOWER => true,
+            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_REQUIRE_DIGIT => true,
+            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_REQUIRE_SPECIAL_CHARACTERS => false,
+            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_SPECIAL_CHARACTERS => ' !\"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~'
+        ),
         'acl' => array(
             'roleProperty' => 'role', //property in user object to pull role from
             'defaultRole' => 'guest',   //default role for unknown users

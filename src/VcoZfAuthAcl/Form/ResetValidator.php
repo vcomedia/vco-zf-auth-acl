@@ -5,11 +5,15 @@ use Zend\InputFilter\Factory as InputFactory;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\EmailAddress;
  
 class ResetValidator implements InputFilterAwareInterface 
 {
     protected $inputFilter;
+    protected $passwordStrengthOptions;
+    
+    public function __construct($passwordStrengthOptions) {
+        $this->passwordStrengthOptions = $passwordStrengthOptions;
+    }
  
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
@@ -34,10 +38,7 @@ class ResetValidator implements InputFilterAwareInterface
                         'validators' => array(
                             array(
                                 'name' => '\VcoZfAuthAcl\Validator\PasswordStrength',
-//                                 'options' => array(
-//                                     'encoding' => 'UTF-8',
-//                                     'min' => '4',
-//                                 ),
+                                'options' => $this->passwordStrengthOptions,
                             ),
                         ),
                     )
