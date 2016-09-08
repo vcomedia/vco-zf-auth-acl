@@ -70,8 +70,31 @@ class ResetController extends AbstractActionController
                 $user->setPasswordReset(null);
                 $this->userService->saveUser($user);
                 
-                $this->flashMessenger()->addSuccessMessage($this->translator->translate($this->config['messages']['passwordUpdateSuccess']));
-                return $this->redirect()->toRoute('login');
+                $successMessage = $this->translator->translate($this->config['messages']['passwordUpdateSuccess']);
+                
+                if($request->isXmlHttpRequest()) {
+                   $jsonResponse = new JsonModel(
+                        array(
+                            'code' => 'reset-success',
+                    	    'message' => $successMessage,
+                            'success'=>true,
+                        )
+                    );
+                    return $jsonResponse;                
+                } else {
+                    $this->flashMessenger()->addSuccessMessage($successMessage);
+                    return $this->redirect()->toRoute('login');
+                }
+            } else if($request->isXmlHttpRequest()) {  //invalid input
+                $messages = $this->resetForm->getMessages();
+                $jsonResponse = new JsonModel(
+                    array(
+                        'code' => 'invalid-input',
+                	    'message' => $messages,
+                        'success'=>false,
+                    )
+                );
+                return $jsonResponse; 
             }
              
             $this->flashMessenger()->addErrorMessage($this->translator->translate($this->config['messages']['passwordConfirmNoMatch']));
