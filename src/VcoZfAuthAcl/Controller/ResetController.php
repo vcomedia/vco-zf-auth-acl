@@ -9,6 +9,7 @@ use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\Mvc\I18n\Translator;
 use VcoZfAuthAcl\Service\UserServiceInterface;
 use Zend\Crypt\Password\PasswordInterface;
+use Zend\View\Model\JsonModel;
 
 class ResetController extends AbstractActionController
 {
