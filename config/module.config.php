@@ -16,173 +16,14 @@ $translator = new \Zend\I18n\Translator\Translator;
 
 return array(
     'VcoZfAuthAcl' => array(
-        'enabled' => true,
-        'unauthorizedStrategy' => 'VcoZfAuthAcl\View\UnauthorizedStrategy',
-        'userService' => 'Application\UserService',
-        'userEmailAddressProperty' => 'email',  //user object property referencing email address for recover password email
-        'smtpTransportService' => 'mail.transport',
-        'authRateLimitService' => 'Application\AuthRateLimitService',  //return false if you don't want rate limiting.  otherwise, implement AuthRateLimitServiceInterface and see class name here
-        'unauthorizedTemplate' => 'vco-zf-auth-acl/error/403',
-        'onLoginRedirectRouteName' => 'home',
-        'layoutName' => 'layout/layout-empty', // set to false to not render layout
-        'viewPath' => array(
-            'login' => 'vco-zf-auth-acl/login/login.phtml', // vco-zf-auth-acl/login/login.phtml
-            'recover' => 'vco-zf-auth-acl/recover/recover.phtml',
-            'reset' => 'vco-zf-auth-acl/reset/reset.phtml',
-            'emailLayout' => 'layout/layout-email.phtml', //set to false to not render email in layout
-            'emailTemplate' => 'vco-zf-auth-acl/email/recover.phtml'
-        ),
-        'messages' => array(
-            'logoutSuccess' => $translator->translate("You've been logged out."),
-            'loginSuccess' => $translator->translate("You've successfully logged in."),
-            'emailPasswordNoMatch' => $translator->translate("Email and password do not match."),
-            'identityFieldLabel' => $translator->translate('Email Address'),
-            'identityFieldPlaceholder' => $translator->translate('Email Address'),
-            'passwordFieldLabel' => $translator->translate('Password'),
-            'passwordFieldPlaceholder' => $translator->translate('Password'),
-            'loginSubmitFieldLabel' => $translator->translate('Submit'),
-            'recoverSubmitFieldLabel' => $translator->translate('Recover Password'),
-            'resetPasswordFieldPlaceholder' => $translator->translate('New Password'),
-            'resetPasswordFieldLabel' => $translator->translate('New Password'),
-            'resetConfirmPasswordFieldPlaceholder' => $translator->translate('Confirm Password'),
-            'resetConfirmPasswordFieldLabel' => $translator->translate('Confirm Password'),
-            'resetSubmitFieldLabel' => $translator->translate('Update Password'),
-            'recoverSubmitSuccess' => $translator->translate('If email address is valid, you will receive an email with further instructions to reset password.'),
-            'passwordResetEmailSubject' => $translator->translate('Password Reset Request'),
-            'passwordResetEmailHeaderText' => $translator->translate('Click on the following link to reset your password.'),
-            'passwordResetEmailFooterText' => $translator->translate('Please note the link above is only valid for 1 hour.  If you did not request the password reset, you can safely ignore this email.'),
-            'resetGuidInvalid' => $translator->translate('Link is invalid or has expired.  Please try again.'),
-            'passwordUpdateSuccess' => $translator->translate('Password successfully updated.'),
-            'passwordConfirmNoMatch' => $translator->translate('Passwords do not match.'),
-            'loginFailedRateLimit' => $translator->translate('Too many failed login attempts.  Account temporarily locked.')
-        ),
-        'passwordStrengthOptions' => array( 
-            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_MIN_LENGTH => 8,
-            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_REQUIRE_UPPER => true,
-            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_REQUIRE_LOWER => true,
-            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_REQUIRE_DIGIT => true,
-            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_REQUIRE_SPECIAL_CHARACTERS => false,
-            \VcoZfAuthAcl\Validator\PasswordStrength::OPTION_SPECIAL_CHARACTERS => ' !\"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~'
-        ),
-        'acl' => array(
-            'roleProperty' => 'role', //property in user object to pull role from
-            'defaultRole' => 'guest',   //default role for unknown users
-            'roles' => array(   //creating role hierarchy: guest >> user >> admin >> god
-                'guest' => null,
-                'user' => 'guest',
-                'admin' => 'user',
-                'god' => 'admin'
-            ),
-            'resources' => array( //module/controllers.  append module name for controllers
-                'storefront' => array(
-                    'storefront:account',
-                    'storefront:admin',
-                    'storefront:cart',
-                    'storefront:catalog',
-                    'storefront:index'
-                ),
-                'application' => array( //module name
-                    'application:index' //module:controller
-                ),
-                'vcozfauthacl' => array(
-                    'vcozfauthacl:login',
-                    'vcozfauthacl:logout',
-                    'vcozfauthacl:recover',
-                    'vcozfauthacl:reset'
-                )
-            ),
-            'allow' => array(
-                array(
-                    'roles' => 'guest',
-                    'resources' => 'application', 
-                    'privileges' => null,   //refers to action
-                    'assertions' => null    //stirng or array of classnames
-                ),
-                array(
-                    'roles' => 'guest',
-                    'resources' => 'vcozfauthacl', 
-                    'privileges' => null, 
-                    'assertions' => null
-                ),
-               array(
-                    'roles' => 'user',
-                    'resources' => 'storefront', 
-                    'privileges' => null, 
-                    'assertions' => null
-                )
-            ),
-            'deny' => array(
-//                array(
-//                    'roles' => 'god',
-//                    'resources' => 'storefront',
-//                    'privileges' => null,
-//                    'assertions' => null
-//                )
-            )
-        )
-    ),
-    'controllers' => array(
-        'factories' => array(
-            'VcoZfAuthAcl\Controller\Login' => 'VcoZfAuthAcl\Factory\Controller\LoginControllerFactory',
-            'VcoZfAuthAcl\Controller\Logout' => 'VcoZfAuthAcl\Factory\Controller\LogoutControllerFactory',
-            'VcoZfAuthAcl\Controller\Recover' => 'VcoZfAuthAcl\Factory\Controller\RecoverControllerFactory',
-            'VcoZfAuthAcl\Controller\Reset' => 'VcoZfAuthAcl\Factory\Controller\ResetControllerFactory'
-        )
-    ),
-    'router' => array(
-        'routes' => array(
-            'login' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route' => '/auth/login',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'VcoZfAuthAcl\Controller',
-                        'controller' => 'VcoZfAuthAcl\Controller\Login',
-                        'action' => 'login'
-                    )
-                )
-            ),
-            'logout' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route' => '/auth/logout',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'VcoZfAuthAcl\Controller',
-                        'controller' => 'VcoZfAuthAcl\Controller\Logout',
-                        'action' => 'logout'
-                    )
-                )
-            ),
-            'recover' => array(
-                'type' => 'Zend\Mvc\Router\Http\Literal',
-                'options' => array(
-                    'route' => '/auth/recover',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'VcoZfAuthAcl\Controller',
-                        'controller' => 'VcoZfAuthAcl\Controller\Recover',
-                        'action' => 'recover'
-                    )
-                )
-            ),
-            'reset' => array(
-                'type' => 'Zend\Mvc\Router\Http\Segment',
-                'options' => array(
-                    'route' => '/auth/reset/:id',
-                    'defaults' => array(
-                        '__NAMESPACE__' => 'VcoZfAuthAcl\Controller',
-                        'controller' => 'VcoZfAuthAcl\Controller\Reset',
-                        'action' => 'reset',
-                        'id' => ''
-                    )
-                )
-            )
-        )
+        'enabled' => false,
     ),
     'service_manager' => array(
         'invokables' => array(
             'VcoZfAuthAcl\passwordService' => 'Zend\Crypt\Password\Bcrypt'  // used to hash and verify passwords
         ),
         'factories' => array(
+            'VcoZfAuthAcl\Service\AclServiceInterface' => 'VcoZfAuthAcl\Factory\Service\AclServiceFactory',
             'Zend\Authentication\AuthenticationService' => 'VcoZfAuthAcl\Factory\Authentication\AuthenticationServiceFactory',
             'VcoZfAuthAcl\View\UnauthorizedStrategy' => 'VcoZfAuthAcl\Factory\UnauthorizedStrategyServiceFactory'
         )
@@ -191,5 +32,10 @@ return array(
         'template_path_stack' => array(
             __DIR__ . '/../view'
         )
+    ),
+    'view_helpers' => array(
+        'factories' => array(
+            'isAllowed' => 'VcoZfAuthAcl\Factory\View\Helper\IsAllowedFactory',
+        )       
     )
 );
