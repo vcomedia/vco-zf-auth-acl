@@ -5,6 +5,8 @@ use Zend\Validator\AbstractValidator;
 
 class PasswordStrength extends AbstractValidator
 {   
+    protected $messageTemplates;
+    
     const LENGTH = 'length';
     const UPPER  = 'upper';
     const LOWER  = 'lower';
@@ -21,16 +23,17 @@ class PasswordStrength extends AbstractValidator
     public function __construct($options = null)
     {
         parent::__construct($options);
+        $minLength = $this->getOption(self::OPTION_MIN_LENGTH);
+        
+        $this->messageTemplates = array(
+            self::LENGTH => "Password must be at least $minLength characters in length",
+            self::UPPER  => "Password must contain at least one uppercase letter",
+            self::LOWER  => "Password must contain at least one lowercase letter",
+            self::DIGIT  => "Password must contain at least one digit character",
+            self::SPECIAL  => "Password must contain at least one special character"
+        );     
     }
     
-    protected $messageTemplates = array(
-        self::LENGTH => "Password must be at least 8 characters in length",
-        self::UPPER  => "Password must contain at least one uppercase letter",
-        self::LOWER  => "Password must contain at least one lowercase letter",
-        self::DIGIT  => "Password must contain at least one digit character",
-        self::SPECIAL  => "Password must contain at least one special character"
-    );
-
     public function isValid($value)
     {
         $this->setValue($value);
