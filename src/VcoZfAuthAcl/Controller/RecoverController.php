@@ -14,6 +14,7 @@ use Zend\Mail\Message;
 use Zend\Mime\Part;
 use Zend\View\Renderer\PhpRenderer;
 use Zend\Mvc\I18n\Translator;
+use Zend\View\Model\JsonModel;
 
 class RecoverController extends AbstractActionController
 {
@@ -122,9 +123,20 @@ class RecoverController extends AbstractActionController
                     $this->mailTransport->send($message);
                 }
             }
-             
-            $this->flashMessenger()->addSuccessMessage($this->translator->translate($this->config['messages']['recoverSubmitSuccess']));
-            return $this->redirect()->toRoute('recover');
+            $successMessage = $this->translator->translate($this->config['messages']['recoverSubmitSuccess']);
+            if($request->isXmlHttpRequest()) {
+               $jsonResponse = new JsonModel(
+                    array(
+                        'code' => 'recover-success',
+                	    'message' => $successMessage,
+                        'success'=>true,
+                    )
+                );
+                return $jsonResponse;                
+            } else {
+                $this->flashMessenger()->addSuccessMessage($successMessage);
+                return $this->redirect()->toRoute('recover');
+            }
         }
  
         $viewModel = new ViewModel(
