@@ -12,6 +12,7 @@ class PasswordStrength extends AbstractValidator
     const LOWER  = 'lower';
     const DIGIT  = 'digit';
     const SPECIAL  = 'special';
+    const DEFAULT_SPECIAL_CHARS = ' !\"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~';
     
     const OPTION_MIN_LENGTH = 'minLength';
     const OPTION_REQUIRE_UPPER = 'requireUpper';
@@ -23,8 +24,28 @@ class PasswordStrength extends AbstractValidator
     public function __construct($options = null)
     {
         parent::__construct($options);
-        $minLength = $this->getOption(self::OPTION_MIN_LENGTH);
+        $options = $this->getOptions();
+        //set default options if non set
+        if(!isset($options[self::OPTION_MIN_LENGTH])) {
+            $options[self::OPTION_MIN_LENGTH] = 8;
+        }
+        if(!isset($options[self::OPTION_REQUIRE_UPPER])) {
+            $options[self::OPTION_REQUIRE_UPPER] = true;
+        }
+        if(!isset($options[self::OPTION_REQUIRE_LOWER])) {
+            $options[self::OPTION_REQUIRE_LOWER] = true;
+        }
+        if(!isset($options[self::OPTION_REQUIRE_DIGIT])) {
+            $options[self::OPTION_REQUIRE_DIGIT] = true;
+        }
+        if(!isset($options[self::OPTION_REQUIRE_SPECIAL_CHARACTERS])) {
+            $options[self::OPTION_REQUIRE_SPECIAL_CHARACTERS] = true;
+        }
+        if(!isset($options[self::OPTION_SPECIAL_CHARACTERS])) {
+            $options[self::OPTION_SPECIAL_CHARACTERS] = self::DEFAULT_SPECIAL_CHARS;
+        }
         
+        $minLength = $this->getOption(self::OPTION_MIN_LENGTH);       
         $this->messageTemplates = array(
             self::LENGTH => "Password must be at least $minLength characters in length",
             self::UPPER  => "Password must contain at least one uppercase letter",
