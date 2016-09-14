@@ -120,7 +120,7 @@ class RecoverController extends AbstractActionController
                     $message = new Message();  
                     $message->setSubject($this->translator->translate($this->config['messages']['passwordResetEmailSubject']));
                     
-                    $fromEmail = (isset($this->mailConfig['mail']) && isset($this->mailConfig['mail']['defaultFrom'])) ? $this->mailConfig['mail']['defaultFrom'] : $this->mailTransport->getOptions()->getConnectionConfig()['username'];
+                    $fromEmail = isset($this->mailConfig['defaultFrom']) ? $this->mailConfig['defaultFrom'] : $this->mailTransport->getOptions()->getConnectionConfig()['username'];
                     
                     $message->addFrom($fromEmail);
                     $message->addTo($emailAddress);
