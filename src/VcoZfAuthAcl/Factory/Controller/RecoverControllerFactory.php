@@ -30,6 +30,7 @@ class RecoverControllerFactory implements FactoryInterface {
         $viewRenderer = $realServiceLocator->get('ViewRenderer');
         $translator = $realServiceLocator->get('MVCTranslator');
 
-        return new RecoverController($authService, $userService, $mailTransport,$recoverForm, $recoverFormValidator, $viewRenderer, $translator, $config['VcoZfAuthAcl']);
+        $mailConfig = isset($config['mail']) ? $config['mail'] : null;
+        return new RecoverController($authService, $userService, $mailTransport,$recoverForm, $recoverFormValidator, $viewRenderer, $translator, $config['VcoZfAuthAcl'], $mailConfig);
     }
 }

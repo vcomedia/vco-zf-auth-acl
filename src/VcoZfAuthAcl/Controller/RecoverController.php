@@ -34,9 +34,11 @@ class RecoverController extends AbstractActionController
     
     protected $config;
     
+    protected $mailConfig;
+    
     //TODO: $userService class needs to live within module
     public function __construct(AuthenticationServiceInterface $authService, UserServiceInterface $userService, TransportInterface $mailTransport,FormInterface $recoverForm, 
-        InputFilterAwareInterface $recoverFormValidator, PhpRenderer $viewRenderer, Translator $translator, array $config) 
+        InputFilterAwareInterface $recoverFormValidator, PhpRenderer $viewRenderer, Translator $translator, array $config, $mailConfig) 
     {
         $this->authService = $authService;
         $this->userService = $userService;
@@ -46,6 +48,7 @@ class RecoverController extends AbstractActionController
         $this->viewRenderer = $viewRenderer;
         $this->translator = $translator;
         $this->config = $config;
+        $this->mailConfig = $mailConfig;
     }
     
     /**
@@ -116,7 +119,10 @@ class RecoverController extends AbstractActionController
                     
                     $message = new Message();  
                     $message->setSubject($this->translator->translate($this->config['messages']['passwordResetEmailSubject']));
-                    $message->addFrom($this->mailTransport->getOptions()->getConnectionConfig()['username']);
+                    
+                    $fromEmail = (isset($this->mailConfig['mail']) && isset($this->mailConfig['mail']['defaultFrom'])) ? $this->mailConfig['mail']['defaultFrom'] : $this->mailTransport->getOptions()->getConnectionConfig()['username'];
+                    
+                    $message->addFrom($fromEmail);
                     $message->addTo($emailAddress);
                     $message->setBody($body);
                     
